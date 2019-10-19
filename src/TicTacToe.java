@@ -4,16 +4,19 @@ import java.util.Scanner;
 //game of tic tac toe
 public class TicTacToe {
     private Scanner sc;
-    private Fields[][] tab;
+    private Fields[][] tabTicTacToe;
     private int[] arrayPoints;
 
     public TicTacToe() {
+
+        System.out.println("game rules:");
+
         this.sc = new Scanner(System.in);
-        this.tab = new Fields[3][3];
+        this.tabTicTacToe = new Fields[3][3];
         this.arrayPoints = new int[9];
-        for(int i = 0; i < tab.length; i++) {
-            for(int j = 0; j < tab[i].length; j++ ) {
-                tab[i][j] = Fields.EMPTY;
+        for(int i = 0; i < tabTicTacToe.length; i++) {
+            for(int j = 0; j < tabTicTacToe[i].length; j++ ) {
+                tabTicTacToe[i][j] = Fields.EMPTY;
             }
         }
 
@@ -25,34 +28,26 @@ public class TicTacToe {
                     System.out.printf("\n______________\n");
                 }
             }
+
+        System.out.println("\n- you have the choice of field 1 - 9" + "\n- there are two players\n" + "- two figures: X, O");
     }
-    public Fields[][] getTab() {
-        return tab;
+
+    public Fields[][] getTabTicTacToe() {
+        return tabTicTacToe;
     }
-    public void setTab(Fields[][] tab) {
-        this.tab = tab;
+    public void setTabTicTacToe(Fields[][] tabTicTacToe) {
+        this.tabTicTacToe = tabTicTacToe;
     }
-    public int[] getArrayPoints() {
-        return arrayPoints;
-    }
-    public void setArrayPoints(int[] arrayPoints) {
-        this.arrayPoints = arrayPoints;
-    }
+
+
     public void startGame() {
-
-        System.out.println("create new two players");
-
         createPlayersAndRandomWhoStartTheGame();
-
-
-        System.out.println("Start game Tic Tac Toe: ");
-        showTicTacToeTables();
-
-
     }
+
     private void createPlayersAndRandomWhoStartTheGame() {
-        Player playerFirst = new Player("Patryshia");
-        Player playerSecond = new Player("Patrick");
+        Player playerFirst = new Player();
+        Player playerSecond = new Player();
+        System.out.println("*******************************\ncreate new two players " + playerFirst.getName() + ", " + playerSecond.getName());
         GameLogic gameLogic = new GameLogic();
 
         Random rand = new Random();
@@ -70,28 +65,52 @@ public class TicTacToe {
     }
 
     private void choiceOfPlayerMovement(Player playerFirst, Player playerSecond, GameLogic gameLogic) {
-
+        System.out.println("the player who starts is drawn");
         Player[] tabPlayer = new Player[]{playerFirst, playerSecond};
         boolean exit = false;
-        System.out.println("please select the available field : ");
+        int counter = 0;
+        System.out.println("\n*******************************\nSTART GAME\nplease select the available field (range 1 - 9) : \n*******************************\n");
 
         while(! exit) {
             for(Player player : tabPlayer) {
 
                 int choiceOfPlayer = choiceSelection(player);
-
-                gameLogic.checkIfPlayerHasThreeOfTheSameFigures(choiceOfPlayer, player, getTab() );
-
+                counter++;
+                if ( gameLogic.checkIfPlayerHasThreeOfTheSameFigures(choiceOfPlayer, player, getTabTicTacToe() ) ) {
+                    setTabTicTacToe( gameLogic.getTabTicTacToe() );
+                    System.out.println("***************************************************");
+                    showTicTacToeTables();
+                    System.out.println("Winner is player -> " + player.getName() + ", figure: " + player.getFigure() );
+                    System.out.print("loser is -> " );
+                    if(! (playerFirst.isWinner()) ) {
+                        System.out.println(playerFirst.getName() + ", figure: " + playerFirst.getFigure());
+                    } else if(! (playerSecond.isWinner()) ) {
+                        System.out.println(playerSecond.getName() + ", figure: " + playerSecond.getFigure());
+                    }
+                    System.out.println("FINISH GAME !!!");
+                    System.out.println("***************************************************");
+                    exit = true; //finish game
+                    break;
+                } else if (counter == 9){
+                    System.out.println("***************************************************");
+                    showTicTacToeTables();
+                    System.out.println("DEAD-HEAT between first player: " + playerFirst.getName() + ", and second player: " + playerSecond.getName());
+                    System.out.println("FINISH GAME !!!");
+                    System.out.println("***************************************************");
+                    exit = true; //finish game
+                    break;
+                } else {
+                    showTicTacToeTables();
+                }
 
             }
         }
 
-
-
-
     }
-    private int choiceSelection(Player player) {
-        System.out.println("enter the value , player " + player.getName() );
+
+
+    public int choiceSelection(Player player) {
+        System.out.println("enter the value , player " + player.getName() + ", has " + player.getFigure() + ", (range 1 - 9): " );
         boolean isExit = false;
         int value = 0;
 
@@ -99,20 +118,21 @@ public class TicTacToe {
             isExit = sc.hasNextInt();
             if(isExit) {
                 value = sc.nextInt();
-                value--;
                 sc.nextLine();
-                for(int i = 0; i < getArrayPoints().length; i++) {
-                    if(value == getArrayPoints()[i]) {
+
+                    if(value > 0 && value <= arrayPoints.length ) {
                         if(checksForAvailableField(value) ) {
                             isExit = true;
                         } else {
                             System.out.println("field is not empty ... please again");
+                            isExit = false;
                         }
+                    } else {
+                        System.out.println("wrong value range 1 - 9 ... try again");
+                        isExit = false;
                     }
-                }
-
             } else {
-                System.out.println(" it's not a number ...");
+                System.out.println(" it's not a number ... please again");
                 sc.nextLine();
             }
         }
@@ -120,13 +140,12 @@ public class TicTacToe {
         return value;
     }
 
-
     private boolean checksForAvailableField(int value) {
         int counter = 0;
-        for(int i = 0; i < tab.length; i++) {
-            for(int j = 0; j < tab[i].length; j++) {
+        for(int i = 0; i < tabTicTacToe.length; i++) {
+            for(int j = 0; j < tabTicTacToe[i].length; j++) {
                 counter++;
-                if(value == counter && tab[i][j].equals(Fields.EMPTY)) {
+                if(value == counter && tabTicTacToe[i][j].equals(Fields.EMPTY)) {
                     return true;
                 }
             }
@@ -136,14 +155,14 @@ public class TicTacToe {
 
 
     public void showTicTacToeTables() {
-        System.out.printf("\n__________________\n");
-        for(int i = 0; i < tab.length; i++) {
-            System.out.print("|");
-            for(int j = 0; j < tab[i].length; j++) {
+        System.out.printf("\n_____________\n");
+        for(int i = 0; i < tabTicTacToe.length; i++) {
+            System.out.printf("|");
+            for(int j = 0; j < tabTicTacToe[i].length; j++) {
 
-                    System.out.printf(" %s | ", (tab[i][j].equals(Fields.EMPTY) ? "  " : tab[i][j]) );
+                    System.out.printf("%s|", (tabTicTacToe[i][j].equals(Fields.EMPTY) ? "   " : " "+tabTicTacToe[i][j]+" ") );
             }
-            System.out.printf("\n__________________\n");
+            System.out.printf("\n_____________\n");
         }
     }
 }
