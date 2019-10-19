@@ -1,6 +1,9 @@
 /**
  * Game of Tic-Tac_Toe
- *
+ * game rules:
+ * - you have the choice of field 1 - 9
+ * - there are two players
+ * - two figures: X, O
  */
 public class TestGameTicTacToe {
 

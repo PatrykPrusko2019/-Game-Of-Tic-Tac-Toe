@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 
-//game of tic tac toe
+
 public class TicTacToe {
     private Scanner sc;
     private Fields[][] tabTicTacToe;
