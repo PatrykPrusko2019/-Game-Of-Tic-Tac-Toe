@@ -32,16 +32,14 @@
  * ___________________________
  *
  *  8 possibilities to win:
- 
-	1 possibility -> 1, 4 , 7 fields
-        2 possibility -> 2, 5 , 8 fields
-        3 possibility -> 3, 6 , 9 fields
-        4 possibility -> 1, 2 , 3 fields
-        5 possibility -> 4, 5 , 6 fields
-        6 possibility -> 7, 8 , 9 fields
-        7 possibility -> 1, 5 , 9 fields
-        8 possibility -> 7, 5 , 3 fields
-
+ *         1 possibility -> 1, 4 , 7 fields
+ *         2 possibility -> 2, 5 , 8 fields
+ *         3 possibility -> 3, 6 , 9 fields
+ *         4 possibility -> 1, 2 , 3 fields
+ *         5 possibility -> 4, 5 , 6 fields
+ *         6 possibility -> 7, 8 , 9 fields
+ *         7 possibility -> 1, 5 , 9 fields
+ *         8 possibility -> 7, 5 , 3 fields
  *
  *
  *   draw of the given player who is to start the game:
