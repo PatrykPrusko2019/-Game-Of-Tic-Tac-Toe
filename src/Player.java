@@ -20,8 +20,6 @@ public class Player {
             }
         }
 
-
-
         this.winner = false;
     }
     private boolean checksName(String name) {
